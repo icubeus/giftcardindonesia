@@ -1,0 +1,13 @@
+<?php $_codes = $this->getCodes(); ?>
+<?php $_isRedeemable = $this->getIsRedeemable(); ?>
+
+<?php foreach ($_codes as $_code): ?>
+    <?php if (!$_code) continue; ?>
+
+    <?php if ($_isRedeemable): ?>
+        <a href="<?php echo $this->getStore()->getUrl('icube_giftcardaccount/customer', array('giftcard'=>$_code)); ?>"><?php echo $this->escapeHtml($_code); ?></a>
+    <?php else: ?>
+        <?php echo $_code; ?>
+    <?php endif; ?>
+    <br />
+<?php endforeach; ?>

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <icube_customerbalance translate="title" module="icube_customerbalance">
+                <title>Customer Balance API</title>
+                <model>icube_customerbalance/api</model>
+                <acl>icube_customerbalance</acl>
+                <methods>
+                    <balance translate="title" module="icube_customerbalance">
+                        <title>Retrieve customer store credit balance information</title>
+                        <acl>icube_customerbalance/balance</acl>
+                    </balance>
+                    <history translate="title" module="icube_customerbalance">
+                        <title>Retrieve customer store credit history information</title>
+                        <acl>icube_customerbalance/history</acl>
+                    </history>
+                </methods>
+                <faults module="icube_customerbalance">
+                    <data_invalid>
+                        <code>100</code>
+                        <message>Provided data is invalid.</message>
+                    </data_invalid>
+                    <balance_not_found>
+                        <code>101</code>
+                        <message>No balance found with requested parameters.</message>
+                    </balance_not_found>
+                    <history_not_found>
+                        <code>102</code>
+                        <message>No history found with requested parameters.</message>
+                    </history_not_found>
+                </faults>
+            </icube_customerbalance>
+            <icube_customerbalance_quote translate="title" module="icube_customerbalance">
+                <title>Customer Balance for Quote API</title>
+                <model>icube_customerbalance/quote_api</model>
+                <acl>cart/storecredit</acl>
+                <methods>
+                    <setAmount>
+                        <title>Set amount from customer store credit into shopping cart (quote)</title>
+                        <acl>cart/storecredit/set</acl>
+                    </setAmount>
+                    <removeAmount>
+                        <title>Remove amount from shopping cart (quote) and increase customer store credit</title>
+                        <acl>cart/storecredit/remove</acl>
+                    </removeAmount>
+                </methods>
+                <faults>
+                    <data_invalid>
+                        <code>100</code>
+                        <message>Provided data is invalid.</message>
+                    </data_invalid>
+                    <quote_not_exists>
+                        <code>103</code>
+                        <message>No quote found with requested id.</message>
+                    </quote_not_exists>
+                    <guest_quote>
+                        <code>104</code>
+                        <message>Store credit can not be used for quote created by guest.</message>
+                    </guest_quote>
+                    <store_not_exists>
+                        <code>105</code>
+                        <message>No store found with requested id or code.</message>
+                    </store_not_exists>
+                </faults>
+            </icube_customerbalance_quote>
+        </resources>
+        <resources_alias>
+            <storecredit>icube_customerbalance</storecredit>
+            <storecredit_quote>icube_customerbalance_quote</storecredit_quote>
+        </resources_alias>
+        <v2>
+            <resources_function_prefix>
+                <storecredit>icubeCustomerbalance</storecredit>
+                <storecredit_quote>shoppingCartCustomerbalance</storecredit_quote>
+            </resources_function_prefix>
+        </v2>
+        <acl>
+            <resources>
+                <icube_customerbalance translate="title" module="icube_customerbalance">
+                    <title>Customer Balance</title>
+                    <balance translate="title" module="icube_customerbalance">
+                        <title>Retrieve balance amount</title>
+                    </balance>
+                    <history translate="title" module="icube_customerbalance">
+                        <title>Retrieve balance history</title>
+                    </history>
+                </icube_customerbalance>
+                <cart>
+                    <storecredit translate="title" module="icube_customerbalance">
+                        <title>Customer balance</title>
+                        <set translate="title" module="icube_customerbalance">
+                            <title>Set</title>
+                        </set>
+                        <remove translate="title" module="icube_customerbalance">
+                            <title>Remove</title>
+                        </remove>
+                    </storecredit>
+                </cart>
+            </resources>
+        </acl>
+    </api>
+</config>

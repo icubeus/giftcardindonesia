@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<logging>
+    <icube_giftcardaccount translate="label">
+        <label>Gift Card Accounts</label>
+        <expected_models>
+            <icube_giftcardaccount__giftcardaccount/>
+        </expected_models>
+        <actions>
+            <adminhtml_giftcardaccount_edit>
+                <action>view</action>
+            </adminhtml_giftcardaccount_edit>
+
+            <adminhtml_giftcardaccount_save>
+                <action>save</action>
+            </adminhtml_giftcardaccount_save>
+
+            <adminhtml_giftcardaccount_delete>
+                <action>delete</action>
+            </adminhtml_giftcardaccount_delete>
+
+            <adminhtml_giftcardaccount_massDelete>
+                <action>massDelete</action>
+            </adminhtml_giftcardaccount_massDelete>
+
+            <adminhtml_giftcardaccount_exportCsv>
+                <action>export</action>
+                <post_dispatch>postDispatchSimpleSave</post_dispatch>
+            </adminhtml_giftcardaccount_exportCsv>
+
+            <adminhtml_giftcardaccount_exportMsxml>
+                <action>export</action>
+                <post_dispatch>postDispatchSimpleSave</post_dispatch>
+            </adminhtml_giftcardaccount_exportMsxml>
+        </actions>
+    </icube_giftcardaccount>
+</logging>

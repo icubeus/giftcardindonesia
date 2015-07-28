@@ -1,0 +1,45 @@
+<?php
+$_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
+?>
+<button style="" onclick="" class="scalable" type="button" id="generateBtn<?php echo $_htmlId ?>">
+    <span><span><span><?php echo Mage::helper('icube_giftcardaccount')->__('Generate'); ?></span></span></span>
+</button>
+<br />
+<p class="nm"><small>
+<?php
+$_usage = $this->getUsage();
+echo Mage::helper('icube_giftcardaccount')->__('Code Pool used: <b>%.2f%%</b> (free <b>%d</b> of <b>%d</b> total).', $_usage->getPercent(), $_usage->getFree(), $_usage->getTotal());
+?>
+</small></p>
+<br />
+
+<script type="text/javascript">
+//<![CDATA[
+function redirectToGeneration()
+{
+    var url = '<?php echo Mage::getSingleton('adminhtml/url')->getUrl('*/giftcardaccount/generate'); ?>';
+    if (confirm('<?php echo Mage::helper('icube_giftcardaccount')->__('Do you really want to proceed? All unsaved changes will be lost.'); ?>')) {
+        if (Prototype.Browser.IE) {
+            var generateLink = new Element('a', {href: url});
+            $$('body')[0].insert(generateLink);
+            generateLink.click();
+        } else {
+            window.location.href = url;
+        }
+    }
+}
+
+function disableGenerateButton()
+{
+    var elem = $('generateBtn<?php echo $_htmlId ?>');
+    elem.disabled = true;
+    elem.addClassName('disabled');
+}
+
+Event.observe('generateBtn<?php echo $_htmlId ?>', 'click', redirectToGeneration)
+
+$('giftcard_giftcardaccount_general').select('input', 'select').each(function(elem) {
+    Event.observe($(elem.id), 'change', disableGenerateButton);
+});
+//]]>
+</script>

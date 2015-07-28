@@ -1,0 +1,13 @@
+<div class="entry-edit box-right">
+    <div class="entry-edit-head">
+        <h4 class="icon-head"><?php echo $this->__('Gift Cards'); ?></h4>
+     </div>
+     <fieldset class="np">
+         <div class="content">
+            <p><input id="giftcardaccount_add_input" type="text" class="input-text" style="width:200px" />&nbsp;<button onclick="applyGiftCard()" type="button" value="" class="scalable"><span><span><span><?php echo $this->__('Add Gift Card'); ?></span></span></span></button></p>
+            <?php foreach ($this->getGiftCards() as $_card): ?>
+                <p><strong><?php echo $_card; ?></strong> [<a href="#" onclick="removeGiftCard('<?php echo $_card; ?>'); return false;" title="<?php echo $this->__('Remove'); ?>"><?php echo $this->__('Remove'); ?></a>]</p>
+            <?php endforeach; ?>
+        </div>
+    </fieldset>
+</div>

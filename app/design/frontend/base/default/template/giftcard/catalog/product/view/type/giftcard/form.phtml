@@ -1,0 +1,16 @@
+<li class="fields">
+    <div class="field">
+        <label for="giftcard_sender_name" class="required"><em>*</em><?php echo Mage::helper('icube_giftcard')->__('Sender Name'); ?></label>
+        <div class="input-box">
+            <input type="text" id="giftcard_sender_name" name="giftcard_sender_name" class="required-entry input-text" value="<?php echo $this->getCustomerName(); ?>" />
+        </div>
+    </div>
+    <?php if ($this->isEmailAvailable()): ?>
+    <div class="field">
+        <label for="giftcard_sender_email" class="required"><em>*</em><?php echo Mage::helper('icube_giftcard')->__('Sender Email'); ?></label>
+        <div class="input-box">
+            <input type="text" id="giftcard_sender_email" name="giftcard_sender_email" class="validate-email required-entry input-text" value="<?php echo $this->getCustomerEmail(); ?>"/>
+        </div>
+    </div>
+    <?php endif; ?>
+</li>

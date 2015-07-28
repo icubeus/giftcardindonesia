@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <giftcardaccount translate="title" module="icube_giftcardaccount">
+                                        <title>Gift Card Accounts</title>
+                                    </giftcardaccount>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <customer>
+                        <children>
+                            <giftcardaccount translate="title" module="icube_giftcardaccount">
+                                <title>Gift Card Accounts</title>
+                                <sort_order>30</sort_order>
+                            </giftcardaccount>
+                        </children>
+                    </customer>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <customer>
+            <children>
+                <giftcardaccount translate="title" module="icube_giftcardaccount">
+                    <title>Gift Card Accounts</title>
+                    <action>adminhtml/giftcardaccount</action>
+                    <depends><module>Icube_GiftCardAccount</module></depends>
+                    <sort_order>30</sort_order>
+                </giftcardaccount>
+            </children>
+         </customer>
+    </menu>
+</config>

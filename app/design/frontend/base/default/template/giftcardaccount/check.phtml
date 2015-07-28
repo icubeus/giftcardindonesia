@@ -1,0 +1,17 @@
+<?php
+/**
+ * @see Icube_GiftCardAccount_Block_Check
+ */
+?>
+<?php $card = $this->getCard() ?>
+<?php if ($card->getId()): ?>
+    <div class="gift-card-info">
+        <p><?php echo $this->__("Gift Card: %s", '<strong class="giftcard-number">' . $card->getCode() . '</strong>'); ?></p>
+        <p><?php echo $this->__('Current Balance: %s', '<strong>' . Mage::helper('core')->currency($card->getBalance()) . '</strong>'); ?></p>
+        <?php if ($card->getDateExpires()): ?>
+            <p><?php echo $this->__('Expires: %s', '<strong>' . $this->formatDate($card->getDateExpires(), 'short') . '</strong>'); ?></p>
+        <?php endif; ?>
+    </div>
+<?php else: ?>
+    <p class="error-msg"><?php echo $this->__('Wrong or expired Gift Card Code.'); ?></p>
+<?php endif; ?>

@@ -1,0 +1,16 @@
+<script type="text/javascript">
+//<![CDATA[
+    function removeGiftCard(code) {
+        var data = {};
+        data['giftcard_remove'] = code;
+        order.loadArea(['totals', 'billing_method', 'items'], true, data);
+    }
+
+    function applyGiftCard() {
+        var code = $('giftcardaccount_add_input').value;
+        var data = {};
+        data['giftcard_add'] = code;
+        order.loadArea(['totals', 'billing_method', 'items'], true, data);
+    }
+//]]>
+</script>

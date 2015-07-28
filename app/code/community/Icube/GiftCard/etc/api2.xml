@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <order>
+                <attributes>
+                    <gift_cards_amount>Gift Cards Amount</gift_cards_amount>
+                    <base_gift_cards_amount>Base Gift Cards Amount</base_gift_cards_amount>
+                </attributes>
+                <include_attributes>
+                    <customer>
+                        <read>
+                            <gift_cards_amount>1</gift_cards_amount>
+                        </read>
+                    </customer>
+                </include_attributes>
+            </order>
+        </resources>
+    </api2>
+</config>

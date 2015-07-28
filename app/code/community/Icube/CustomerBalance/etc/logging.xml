@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<logging>
+    <icube_customerbalance translate="label">
+        <label>Store Credit</label>
+        <actions>
+            <adminhtml_customerbalance_form>
+                <action>view</action>
+                <expected_models>
+                    <icube_customerbalance__balance/>
+                </expected_models>
+            </adminhtml_customerbalance_form>
+        </actions>
+    </icube_customerbalance>
+    <customer>
+        <actions>
+            <adminhtml_customer_save>
+                <expected_models extends="merge">
+                    <icube_customerbalance__balance/>
+                </expected_models>
+                <skip_on_back>
+                    <adminhtml_customerbalance_form/>
+                    <adminhtml_customer_edit/>
+                </skip_on_back>
+            </adminhtml_customer_save>
+        </actions>
+    </customer>
+</logging>

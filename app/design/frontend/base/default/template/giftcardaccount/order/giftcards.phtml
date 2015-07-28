@@ -1,0 +1,22 @@
+<?php
+    $_order  = $this->getOrder();
+    $_source = $this->getSource();
+    $_cards  = $this->getGiftCards();
+?>
+<?php if ($_cards):?>
+<?php foreach ($_cards as $_card): ?>
+<tr>
+    <td <?php echo $this->getLabelProperties()?>>
+        <?php echo Mage::helper('icube_giftcardaccount')->__('Gift Card (%s)', $_card->getCode()); ?>
+    </td>
+    <td <?php echo $this->getValueProperties()?>>-<?php echo $_order->formatPrice($_card->getAmount()) ?></td>
+</tr>
+<?php endforeach; ?>
+<?php elseif ($_source->getGiftCardsAmount()>0): ?>
+<tr>
+    <td <?php echo $this->getLabelProperties()?>>
+        <?php echo Mage::helper('icube_giftcardaccount')->__('Gift Card'); ?>
+    </td>
+    <td <?php echo $this->getValueProperties()?>>-<?php echo $_order->formatPrice($_source->getGiftCardsAmount()) ?></td>
+</tr>
+<?php endif?>

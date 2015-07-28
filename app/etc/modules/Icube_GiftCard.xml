@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Icube_GiftCard>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Icube_GiftCardAccount/>
+            </depends>
+        </Icube_GiftCard>
+    </modules>
+</config>

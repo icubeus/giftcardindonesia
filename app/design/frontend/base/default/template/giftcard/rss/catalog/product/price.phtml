@@ -1,0 +1,26 @@
+<?php
+/**
+ * Template for displaying giftcard product price in RSS feeds
+ *
+ * @see Icube_GiftCard_Block_Catalog_Product_Price
+ */
+?>
+
+<?php
+    $_product = $this->getProduct();
+    $_id = $_product->getId();
+?>
+<?php if ($_product->getCanShowPrice() !== false):?>
+    <div class="price-box">
+    <?php if (($_min = $this->getMinAmount()) && ($_max = $this->getMaxAmount()) && ($_min == $_max)): ?>
+        <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+            <?php echo Mage::helper('core')->currency($_min, true, false) ?>
+        </span>
+    <?php elseif (($_min = $this->getMinAmount()) && $_min != 0): ?>
+        <span class="label"><?php echo Mage::helper('icube_giftcard')->__('From') ?></span>
+        <span class="price" id="min-product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+            <?php echo Mage::helper('core')->currency($_min,true,false) ?>
+        </span>
+    <?php endif; ?>
+    </div>
+<?php endif; ?>

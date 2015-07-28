@@ -1,0 +1,6 @@
+<?php if ($this->canRedeem()): ?>
+    <div class="account-balance">
+        <h2 class="sub-title"><?php echo Mage::helper('icube_giftcardaccount')->__('Redeem Gift Card'); ?></h2>
+        <p><?php echo Mage::helper('icube_giftcardaccount')->__('Have a gift card? <a href="%s">Click here</a> to redeem it.', Mage::getUrl('icube_giftcardaccount/customer')); ?></p>
+    </div>
+<?php endif; ?>
