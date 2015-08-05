@@ -49,21 +49,21 @@ class Icube_GiftCardAccount_Block_Adminhtml_Giftcardaccount_Edit_Tab_Info extend
             $model->setData('status', Icube_GiftCardAccount_Model_Giftcardaccount::STATUS_ENABLED);
         }
 
-        $fieldset->addField('is_redeemable', 'select', array(
-            'label'     => Mage::helper('icube_giftcardaccount')->__('Redeemable'),
-            'title'     => Mage::helper('icube_giftcardaccount')->__('Redeemable'),
-            'name'      => 'is_redeemable',
-            'required'  => true,
-            'options'   => array(
-                Icube_GiftCardAccount_Model_Giftcardaccount::REDEEMABLE =>
-                    Mage::helper('icube_giftcardaccount')->__('Yes'),
-                Icube_GiftCardAccount_Model_Giftcardaccount::NOT_REDEEMABLE =>
-                    Mage::helper('icube_giftcardaccount')->__('No'),
-            ),
-        ));
-        if (!$model->getId()) {
-            $model->setData('is_redeemable', Icube_GiftCardAccount_Model_Giftcardaccount::REDEEMABLE);
-        }
+//        $fieldset->addField('is_redeemable', 'select', array(
+//            'label'     => Mage::helper('icube_giftcardaccount')->__('Redeemable'),
+//            'title'     => Mage::helper('icube_giftcardaccount')->__('Redeemable'),
+//            'name'      => 'is_redeemable',
+//            'required'  => true,
+//            'options'   => array(
+//                Icube_GiftCardAccount_Model_Giftcardaccount::REDEEMABLE =>
+//                    Mage::helper('icube_giftcardaccount')->__('Yes'),
+//                Icube_GiftCardAccount_Model_Giftcardaccount::NOT_REDEEMABLE =>
+//                    Mage::helper('icube_giftcardaccount')->__('No'),
+//            ),
+//        ));
+//        if (!$model->getId()) {
+//            $model->setData('is_redeemable', Icube_GiftCardAccount_Model_Giftcardaccount::REDEEMABLE);
+//        }
 
         $field = $fieldset->addField('website_id', 'select', array(
             'name'      => 'website_id',
@@ -83,16 +83,30 @@ class Icube_GiftCardAccount_Block_Adminhtml_Giftcardaccount_Edit_Tab_Info extend
             'name'      => 'balance',
             'class'     => 'validate-number',
             'required'  => true,
-            'note'      => '<div id="balance_currency"></div>'
+            'note'      => '<div id="balance_currency"></div><b>value must equal or greater than current balance</b>'
         ));
 
-        $fieldset->addField('date_expires', 'date', array(
-            'name'   => 'date_expires',
-            'label'  => Mage::helper('icube_giftcardaccount')->__('Expiration Date'),
-            'title'  => Mage::helper('icube_giftcardaccount')->__('Expiration Date'),
-            'image'  => $this->getSkinUrl('images/grid-cal.gif'),
-            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT)
-        ));
+        if ($model->getId()){
+            $fieldset->addField('date_expires', 'date', array(
+                'name'   => 'date_expires',
+                'label'  => Mage::helper('icube_giftcardaccount')->__('Expiration Date'),
+                'title'  => Mage::helper('icube_giftcardaccount')->__('Expiration Date'),
+                'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+                'disabled' => true
+            ));
+            $fieldset->addField('distribution_id', 'label', array(
+                'name'      => 'distribution_id',
+                'label'     => Mage::helper('icube_giftcardaccount')->__('Distribution ID'),
+                'title'     => Mage::helper('icube_giftcardaccount')->__('Distribution ID'),
+            ));
+        } else {
+            $fieldset->addField('distribution_id', 'text', array(
+                'label'     => Mage::helper('icube_giftcardaccount')->__('Distribution ID'),
+                'title'     => Mage::helper('icube_giftcardaccount')->__('Distribution ID'),
+                'name'      => 'distribution_id',
+                'required'  => true
+            ));
+        }
 
         $form->setValues($model->getData());
 

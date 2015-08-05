@@ -6,6 +6,8 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
 {
     const API_USERNAME_CONFIG_PATH              = 'giftcard/api_config/username';
     const API_PASSWORD_CONFIG_PATH              = 'giftcard/api_config/password';
+    const API_KEY_CONFIG_PATH                    = 'giftcard/api_config/api_key';
+    const API_SECRET_CONFIG_PATH              = 'giftcard/api_config/secret_key';
     const TOKEN_URL_CONFIG_PATH                 = 'giftcard/api_config/token_url';              // http://private-2109c-gcidistribution.apiary-mock.com/oauth/token
     const ACTIVATE_URL_CONFIG_PATH              = 'giftcard/api_config/activate_url';           // http://private-2109c-gcidistribution.apiary-mock.com/v1/giftcards
     const REDEEM_URL_CONFIG_PATH                = 'giftcard/api_config/redeem_url';             // http://private-2109c-gcidistribution.apiary-mock.com/v1/giftcards/redeem
@@ -23,7 +25,10 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
     {
         $username = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::API_USERNAME_CONFIG_PATH);
         $password = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::API_PASSWORD_CONFIG_PATH);
+        $apiKey = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::API_KEY_CONFIG_PATH);
+        $secretKey = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::API_SECRET_CONFIG_PATH);
         $url = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::TOKEN_URL_CONFIG_PATH);
+
         $data = array(
             'grant_type'    =>'password',
             'scope'         =>'offline_access',
@@ -36,16 +41,17 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_USERPWD, $apiKey.':'.$secretKey);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Content-Type: application/x-www-form-urlencoded",
-            'Authorization: "Basic Base64Encoded(ApiKey:ApiSecret)"'
         ));
         $response = curl_exec($ch);
         curl_close($ch);
 
         $response = json_decode($response);
         $access_token = $response->access_token;
+        return $access_token;
         /*
          * 200
         Content-Type: application/json
@@ -58,15 +64,15 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         */
     }
 
-    public function activate($amount)
+    public function activate($distributionId,$amount)
     {
         $token = $this->getToken();
-        $distributionId = 'distributionId';
         $url = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::ACTIVATE_URL_CONFIG_PATH);
         $data = array(
-            'distributionId'    => $distributionId,
-            'amount'            => $amount,
+            "distributionId"    => $distributionId,
+            "amount"            => $amount,
         );
+        $data = json_encode($data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -76,12 +82,14 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Content-Type: application/json",
-            'Authorization: "Bearer '.$token.'"'
+            "Authorization: Bearer ".$token
         ));
         $response = curl_exec($ch);
+        Mage::log('orig $response:'.print_r($response,true),null,'GCdata.log',true);
         curl_close($ch);
-
+        $response = '{"cardNo":"6817133197574717","balance":'.$amount.',"expired":"03/09/2015","status":"active","approvalCode":788590,"merchant":"Giftcard4Dummies","trxNo":"307382612489163","trxType":"activation","trxCode":"6934657e57a072d4dacc2ad074d4edba1cde8cd7ab707508ab47030cf7b27b542d7954de9f1d2e8b","trxStatus":"accepted","trxAmount":30000,"trxTime":"04/08/2015","terminalId":166,"id":5469}';
         $response = json_decode($response);
+        return $response;
         /*
          * 200
         Content-Type: application/json
@@ -113,17 +121,17 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
 
     }
 
-    public function redeem($amount)
+    public function redeem($distributionId,$amount)
     {
         $token = $this->getToken();
-        $distributionId = 'distributionId';
-        $pin = 'pin';
+//        $pin = 'pin';
         $url = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::REDEEM_URL_CONFIG_PATH);
         $data = array(
             'distributionId'    => $distributionId,
-            'pin'               => $pin,
+//            'pin'               => $pin,
             'amount'            => $amount,
         );
+        $data = json_encode($data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -133,15 +141,14 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Content-Type: application/json",
-            'Authorization: "Bearer '.$token.'"'
+            "Authorization: Bearer ".$token
         ));
 
         $response = curl_exec($ch);
+        Mage::log('orig $response:'.print_r($response,true),null,'GCdata.log',true);
         curl_close($ch);
-
-        var_dump($response);
-
         $response = json_decode($response);
+        return $response;
         /*
          * 200
         Content-Type: application/json
@@ -172,15 +179,16 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
          * */
     }
 
-    public function topup($amount)
+    public function topup($distributionId,$amount)
     {
         $token = $this->getToken();
-        $distributionId = 'distributionId';
         $url = Mage::getStoreConfig(Icube_GiftCard_Helper_Api_Data::TOPUP_URL_CONFIG_PATH);
+
         $data = array(
-            'distributionId'    => $distributionId,
-            'amount'            => $amount,
+            "distributionId"    => $distributionId,
+            "amount"    => $amount
         );
+        $data = json_encode($data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -190,15 +198,13 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Content-Type: application/json",
-            'Authorization: "Bearer '.$token.'"'
+            "Authorization: Bearer ".$token
         ));
-
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
-
         $response = json_decode($response);
+        return $response;
         /*
          * 200
         Content-Type: application/json
@@ -252,7 +258,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -298,7 +304,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -347,7 +353,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -400,7 +406,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -450,7 +456,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -514,7 +520,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -585,7 +591,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*
@@ -641,7 +647,7 @@ class Icube_GiftCard_Helper_Api_Data extends Mage_Core_Helper_Abstract
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump($response);
+//        var_dump($response);
 
         $response = json_decode($response);
         /*

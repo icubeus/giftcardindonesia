@@ -158,6 +158,7 @@ class Icube_GiftCardAccount_Model_Giftcardaccount extends Mage_Core_Model_Abstra
      */
     protected function _beforeSave()
     {
+        Mage::log('$this->getCode():'.$this->getCode(),null,'GCdata.log',true);
         $this->_parentBeforeSave();
         $this->_preSaveProcess();
     }
@@ -326,7 +327,9 @@ class Icube_GiftCardAccount_Model_Giftcardaccount extends Mage_Core_Model_Abstra
      */
     protected function _defineCode()
     {
-        return $this->setCode($this->getPoolModel()->setExcludedIds(self::$_alreadySelectedIds)->shift());
+        $code = $this->getPoolModel()->setExcludedIds(self::$_alreadySelectedIds)->shift();
+        Mage::log('$code:'.$code,null,'GCdata.log',true);
+        return $this->setCode($code);
     }
 
     /**

@@ -100,6 +100,69 @@ class Icube_GiftCardAccount_Adminhtml_GiftcardaccountController extends Mage_Adm
 
             if (!empty($data)) {
                 $model->addData($data);
+                Mage::log('data:'.print_r($data,true),null,'GCdata.log',true);
+                Mage::log('balance orig:'.$model->getOrigData('balance'),null,'GCdata.log',true);
+                if($data[giftcardaccount_id]) { // edit - topup
+                        $distributionId = $model->getData('distribution_id');//'00000000000990056817133197574717';
+                    $amount = $data[balance] - $model->getOrigData('balance');
+                    Mage::log('$amount:'.$amount,null,'GCdata.log',true);
+                    if($amount >= 0) {
+                        $gc = Mage::helper('icube_giftcard/api_data')->topup($distributionId,$amount);
+                        Mage::log('$gc:'.print_r($gc,true),null,'GCdata.log',true);
+                        if(!is_null($gc->cardNo)) {
+                            $model->setData('balance',$gc->balance);
+                        } else {
+                            if(is_null($gc->message)) {
+                                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('icube_giftcardaccount')->__('No distribution ID available.'));
+                            } else {
+                                Mage::getSingleton('adminhtml/session')->addError($gc->message);
+                            }
+                            $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                            return;
+                        }
+                    } else {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('icube_giftcardaccount')->__('Balance value must equal or greater than current balance.'));
+                        $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                        return;
+                    }
+                } else { // create new
+                    $distributionId = $data[distribution_id];
+                    Mage::log('$distributionId:'.$distributionId,null,'GCdata.log',true);
+                    $gc = Mage::helper('icube_giftcard/api_data')->activate($distributionId,$data[balance]);
+                    if(!is_null($gc->cardNo)) {
+                        Mage::log('$gc:'.print_r($gc,true),null,'GCdata.log',true);
+                        $model->setCode($gc->cardNo);
+                        $model->setData('distribution_id',$distributionId);
+                        $date   = DateTime::createFromFormat('d/m/Y', $gc->expired)->format('Y-m-d');
+                        $model->setData('date_expires',$date);
+                        Mage::log('$date:'.$date,null,'GCdata.log',true);
+                    } else {
+                        if(is_null($gc->message)) {
+                            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('icube_giftcardaccount')->__('No distribution ID available.'));
+                        } else {
+                            Mage::getSingleton('adminhtml/session')->addError($gc->message);
+                        }
+                        $this->_redirect('*/*/edit');
+                        return;
+                    }
+                }
+                /*
+                 * string(371) "{"cardNo":"6817133197574717","balance":30000,"expired":"03/09/2015","status":"active","approvalCode":788590,"merchant":"Giftcard4Dummies","trxNo":"307382612489163","trxType":"activation","trxCode":"6934657e57a072d4dacc2ad074d4edba1cde8cd7ab707508ab47030cf7b27b542d7954de9f1d2e8b","trxStatus":"accepted","trxAmount":30000,"trxTime":"04/08/2015","terminalId":166,"id":5469}"
+                 * data:
+                Array(
+                    [form_key] => MmGFO4NjMSz3nyMN
+                    [status] => 1
+                    [is_redeemable] => 1
+                    [website_id] => 1
+                    [balance] => 15000
+                    [date_expires] =>
+                    [recipient_email] =>
+                    [recipient_name] =>
+                    [recipient_store] => 1
+                    [send_action] => 0
+                )
+                */
+                //call API here
             }
 
             // try to save it

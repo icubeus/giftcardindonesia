@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
     <checkout_cart_index>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/giftcard/giftcard.css</stylesheet></action>
+        </reference>
         <reference name="checkout.cart">
+            <!--<action method="setCartTemplate"><value>giftcardaccount/checkout/cart.phtml</value></action>-->
+            <action method="setTemplate"><template>giftcardaccount/checkout/cart.phtml</template></action>
             <block type="icube_giftcardaccount/checkout_cart_giftcardaccount" template="giftcardaccount/cart/block.phtml" name="checkout.cart.giftcardaccount" as="giftcards" />
         </reference>
     </checkout_cart_index>

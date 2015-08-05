@@ -121,6 +121,13 @@ class Icube_GiftCardAccount_Block_Adminhtml_Giftcardaccount_Grid extends Mage_Ad
                 'index'         => 'balance',
         ));
 
+        $this->addColumn('distribution_id',
+            array(
+                'header'        => Mage::helper('icube_giftcardaccount')->__('Distribution ID'),
+                'index'         => 'distribution_id',
+                'width'     => 170,
+        ));
+
         return parent::_prepareColumns();
     }
 

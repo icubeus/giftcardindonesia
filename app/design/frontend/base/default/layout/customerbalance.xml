@@ -24,6 +24,17 @@
     </icube_customerbalance_info_index>
 
     <checkout_onepage_index>
+        <reference name="content">
+            <reference name="checkout.onepage">
+                <reference name="checkout.onepage.payment">
+                    <action method="setTemplate">
+                        <template>customerbalance/checkout/onepage/payment.phtml</template>
+                    </action>
+                    <block type="core/template" name="checkout.onepage.payment.additional" as="additional" />
+                    <block type="core/template" name="checkout.onepage.payment.methods_additional" as="methods_additional" />
+                </reference>
+            </reference>
+        </reference>
         <reference name="checkout.onepage.payment.methods_additional">
             <block type="icube_customerbalance/checkout_onepage_payment_additional" template="customerbalance/checkout/onepage/payment/additional.phtml" name="customerbalance" />
         </reference>

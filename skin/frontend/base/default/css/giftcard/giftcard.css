@@ -1,0 +1,10 @@
+/* Discount Codes & Estimate Shipping and Tax Boxes */
+.cart .giftcard { border:1px solid #d0cbc1; background:#fff url(../images/bkg_block-title.gif) 0 0 repeat-x; padding:12px 15px; margin:0 0 18px; }
+.cart .giftcard h2 { background-position:0 0; background-repeat:no-repeat; font:bold 13px/16px Arial, Helvetica, sans-serif; padding:0 0 0 21px; color:#e26703; text-transform:uppercase; }
+.cart .giftcard button span { border-color:#406a83; background:#618499; }
+.cart .giftcard .buttons-set { margin:10px 0 0; border:0; padding:0; text-align:left; }
+.cart .giftcard .buttons-set button.button { float:none; margin-left:0; }
+
+.cart .giftcard h2 { background-image:url(../images/i_discount.gif); }
+.cart .giftcard .input-box { margin:8px 0 0; width:260px; }
+.cart .giftcard input.input-text { width:254px; }
