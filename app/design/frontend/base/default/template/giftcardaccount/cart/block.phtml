@@ -3,6 +3,7 @@
  * @see Icube_GiftCardAccount_Block_Checkout_Cart_Giftcardaccount
  */
 ?>
+<?php if(Mage::getSingleton('customer/session')->isLoggedIn()) : ?>
 <div class="giftcard">
     <h2><?php echo $this->__('Gift Cards') ?></h2>
     <div id="giftcard_balance_lookup"></div>
@@ -42,3 +43,4 @@
     //]]>
     </script>
 </div>
+<?php endif; ?>
